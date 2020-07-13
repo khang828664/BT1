@@ -1,12 +1,31 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 import './index.css';
-import App from './App';
+import App from './component/App'
 import * as serviceWorker from './serviceWorker';
+import 'bootstrap/dist/css/bootstrap.min.css';
+import {Provider} from 'react-redux'
+import {createStore} from 'redux'
 
+type state = [{
+  getBy: number 
+  currentPage : number
+}]
+const initalState :state = [{
+    getBy :5,
+    currentPage :0
+}]
+const rootReducers = (state =  initalState , action: any ) =>  {
+    return state
+}
+const store = createStore(rootReducers) 
+        
 ReactDOM.render(
-  <React.StrictMode>
-    <App />
+  
+  <React.StrictMode> 
+    <Provider store = {store} >
+    <App/>
+    </Provider>
   </React.StrictMode>,
   document.getElementById('root')
 );
