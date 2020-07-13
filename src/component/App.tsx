@@ -30,14 +30,20 @@ const data = [{
   "name": "khang"
 }
 ]
-
-function App () {
-
+interface myState {
+  GETBY : number
+  CURRENTPAGE : number
+}
+interface action {
+  plusCurrentPage : any
+}
+function  App ( { GETBY   , CURRENTPAGE, plusCurrentPage   } : any)  {
+  
   const [isPop, setIsPop] = useState(false )
  
-  const [currentPage, setCurrentPage] = useState(0)
+  const [currentPage, setCurrentPage] = useState(CURRENTPAGE)
   const [listData, setListData] = useState(data)
-  const [getBy, setGetby] = useState(2)
+  const [getBy, setGetby] = useState(GETBY)
   const [dataCurrent, setCurrentData] = useState([])
   const handleClose = () => setIsPop(false);
   useEffect(() => {
@@ -121,6 +127,9 @@ function App () {
     <Button  variant ="primary" onClick = {()=> setIsPop(true)}>
       CLICK ME ! to popUp
     </Button>
+    <Button  variant ="primary" onClick = {plusCurrentPage}>
+      CLICK ME www! to popUp
+    </Button>
       <Modal 
         show={isPop} onHide={handleClose} 
         animation={true}
@@ -130,7 +139,7 @@ function App () {
         backdrop ="static"
       >
         <Modal.Header closeButton>
-          <Modal.Title>Picture Silde</Modal.Title>
+        <Modal.Title>Picture Silde {CURRENTPAGE}</Modal.Title>
         </Modal.Header>
         <Modal.Body>
            <div className="div_main"> 
@@ -154,11 +163,18 @@ function App () {
     </div>
   );
 }
-const mapStatetoProp = (state :any ) => {
-    getBy :  state.getBy
-    currentPage  : state.currentPage
+const mapStatetoProp = (state :any ) => (
+    {
+      GETBY : state.getBy,
+      CURRENTPAGE : state.currentPage
 
-} 
-export default connect (App) {
-  mapStatetoProp
+    })
+const dispatchToProps = (dispatch : any )  => {
+  return {
+      plusCurrentPage : () => dispatch({type:'PLUS_CURRENT'}) 
+  }
 }
+export default connect <myState> (
+      mapStatetoProp, 
+      dispatchToProps
+) (App)
